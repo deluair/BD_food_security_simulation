@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ report_title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            margin-bottom: 10px;
+            color: white;
+            font-weight: 700;
+        }
+        .header p {
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 5px;
+        }
+        .container {
+            max-width: 1200px;
+            padding: 0 15px;
+        }
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+        .section h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        h3 {
+            color: #3498db;
+            font-size: 20px;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+        .chart-container {
+            margin: 25px 0;
+            text-align: center;
+            position: relative;
+        }
+        .chart-container h4 {
+            margin-bottom: 15px;
+            color: #34495e;
+            font-weight: 600;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #eaeaea;
+            border-radius: 6px;
+            padding: 8px;
+            background-color: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        img:hover {
+            transform: scale(1.01);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            margin-bottom: 25px;
+            border-collapse: collapse;
+        }
+        table th {
+            background-color: #f2f8ff;
+            font-weight: 600;
+            border: 1px solid #e3e3e3;
+            padding: 10px;
+            text-align: center;
+        }
+        table td {
+            border: 1px solid #e3e3e3;
+            padding: 8px;
+            text-align: center;
+        }
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease;
+            height: 100%;
+        }
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .metric-card h5 {
+            color: #7f8c8d;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .metric-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #3498db;
+        }
+        .metric-icon {
+            font-size: 30px;
+            margin-bottom: 15px;
+            color: #3498db;
+        }
+        .footer {
+            margin-top: 40px;
+            padding: 25px 15px;
+            text-align: center;
+            font-size: 14px;
+            color: #7f8c8d;
+            background-color: #2c3e50;
+            color: rgba(255,255,255,0.7);
+        }
+        .footer p {
+            margin-bottom: 5px;
+        }
+        @media (max-width: 768px) {
+            .metric-card {
+                margin-bottom: 15px;
+            }
+        }
+        .scenario-badge {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .scenario-badge-lg {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            text-align: center;
+            width: 100%;
+        }
+        .takeaway-card {
+            background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+            border-left: 4px solid #3498db;
+            transition: transform 0.2s ease;
+        }
+        .takeaway-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .takeaway-card h5 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .takeaway-card i {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1><i class="fas fa-chart-line"></i> {{ report_title }}</h1>
+            <p><i class="far fa-calendar-alt"></i> Generated on {{ generation_time }}</p>
+            <p><i class="fas fa-calendar-week"></i> Simulation period: {{ simulation_period }}</p>
+            <div class="scenario-badge" title="Simulation scenario">
+                {{ report_title.split(': ')[-1] if ':' in report_title else 'Base Scenario' }}
+            </div>
+        </div>
+    </div>
+    <div class="container">
+
+        <div class="section">
+            <h2><i class="fas fa-tachometer-alt"></i> Executive Summary</h2>
+            <p>This report presents the results of the Bangladesh Food Security Simulation Model. The model simulates food production, consumption, and nutritional outcomes under different scenarios.</p>
+            
+            {% if main_takeaways %}
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0"><i class="fas fa-lightbulb"></i> Key Takeaways</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                {% for area, takeaway in main_takeaways.items() %}
+                                <div class="col-md-6 mb-3">
+                                    <div class="takeaway-card p-3 border rounded h-100">
+                                        {% if 'production' in area.lower() or 'agriculture' in area.lower() %}
+                                            <h5><i class="fas fa-seedling text-success"></i> {{ area|replace('_', ' ')|title }}</h5>
+                                        {% elif 'food' in area.lower() or 'security' in area.lower() %}
+                                            <h5><i class="fas fa-heartbeat text-danger"></i> {{ area|replace('_', ' ')|title }}</h5>
+                                        {% elif 'nutrition' in area.lower() %}
+                                            <h5><i class="fas fa-apple-alt text-warning"></i> {{ area|replace('_', ' ')|title }}</h5>
+                                        {% elif 'market' in area.lower() or 'price' in area.lower() %}
+                                            <h5><i class="fas fa-chart-line text-info"></i> {{ area|replace('_', ' ')|title }}</h5>
+                                        {% elif 'policy' in area.lower() %}
+                                            <h5><i class="fas fa-balance-scale text-primary"></i> {{ area|replace('_', ' ')|title }}</h5>
+                                        {% else %}
+                                            <h5><i class="fas fa-info-circle"></i> {{ area|replace('_', ' ')|title }}</h5>
+                                        {% endif %}
+                                        <p>{{ takeaway }}</p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <div class="row mt-4">
+                {% if scenario_metrics %}
+                    <div class="col-12 mb-4">
+                        <div class="card border-primary">
+                            <div class="card-header bg-primary text-white">
+                                <h4 class="mb-0">Scenario Comparison</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Metric</th>
+                                                {% if 'baseline' in scenario_metrics %}
+                                                    <th><span class="badge bg-secondary">Baseline</span></th>
+                                                {% endif %}
+                                                {% if 'high_climate_impact' in scenario_metrics %}
+                                                    <th><span class="badge bg-danger">High Climate Impact</span></th>
+                                                {% endif %}
+                                                {% if 'enhanced_adaptation' in scenario_metrics %}
+                                                    <th><span class="badge bg-success">Enhanced Adaptation</span></th>
+                                                {% endif %}
+                                                {% if 'policy_change_safety_net' in scenario_metrics %}
+                                                    <th><span class="badge bg-info">Policy Change Safety Net</span></th>
+                                                {% endif %}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for metric_name, values in key_metrics.items() %}
+                                                <tr>
+                                                    <td><strong>{{ metric_name }}</strong></td>
+                                                    
+                                                    {% if 'baseline' in scenario_metrics %}
+                                                        {% set value = values.get('baseline', 'N/A') %}
+                                                        <td>
+                                                            {% if 'Stunting Rate' in metric_name or 'Wasting Rate' in metric_name %}
+                                                                {% if value != 'N/A' %}
+                                                                    {% set numeric_value = value|float(0) %}
+                                                                    {% if numeric_value > 0.3 %}
+                                                                        <span class="text-danger fw-bold">{{ value }}</span>
+                                                                    {% elif numeric_value > 0.2 %}
+                                                                        <span class="text-warning fw-bold">{{ value }}</span>
+                                                                    {% else %}
+                                                                        <span class="text-success fw-bold">{{ value }}</span>
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    {{ value }}
+                                                                {% endif %}
+                                                            {% elif 'Energy Intake' in metric_name %}
+                                                                {% if value != 'N/A' and value != '0 kcal' %}
+                                                                    {% set parts = value.split(' ') %}
+                                                                    {% if parts|length > 0 %}
+                                                                        {% set numeric_value = parts[0]|int(0) %}
+                                                                        {% if numeric_value < 1900 %}
+                                                                            <span class="text-danger fw-bold">{{ value }}</span>
+                                                                        {% elif numeric_value < 2100 %}
+                                                                            <span class="text-warning fw-bold">{{ value }}</span>
+                                                                        {% else %}
+                                                                            <span class="text-success fw-bold">{{ value }}</span>
+                                                                        {% endif %}
+                                                                    {% else %}
+                                                                        {{ value }}
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    {{ value }}
+                                                                {% endif %}
+                                                            {% elif 'Production' in metric_name %}
+                                                                {% if value != 'N/A' %}
+                                                                    <span class="fw-bold">{{ value }}</span>
+                                                                {% else %}
+                                                                    <span>{{ value }}</span>
+                                                                {% endif %}
+                                                            {% else %}
+                                                                {{ value }}
+                                                            {% endif %}
+                                                        </td>
+                                                    {% endif %}
+                                                    
+                                                    {% if 'high_climate_impact' in scenario_metrics %}
+                                                        {% set value = values.get('high_climate_impact', 'N/A') %}
+                                                        <td>
+                                                            {% if 'Stunting Rate' in metric_name or 'Wasting Rate' in metric_name %}
+                                                                {% if value != 'N/A' %}
+                                                                    {% set numeric_value = value|float(0) %}
+                                                                    {% if numeric_value > 0.3 %}
+                                                                        <span class="text-danger fw-bold">{{ value }}</span>
+                                                                    {% elif numeric_value > 0.2 %}
+                                                                        <span class="text-warning fw-bold">{{ value }}</span>
+                                                                    {% else %}
+                                                                        <span class="text-success fw-bold">{{ value }}</span>
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    {{ value }}
+                                                                {% endif %}
+                                                            {% elif 'Energy Intake' in metric_name %}
+                                                                {% if value != 'N/A' and value != '0 kcal' %}
+                                                                    {% set parts = value.split(' ') %}
+                                                                    {% if parts|length > 0 %}
+                                                                        {% set numeric_value = parts[0]|int(0) %}
+                                                                        {% if numeric_value < 1900 %}
+                                                                            <span class="text-danger fw-bold">{{ value }}</span>
+                                                                        {% elif numeric_value < 2100 %}
+                                                                            <span class="text-warning fw-bold">{{ value }}</span>
+                                                                        {% else %}
+                                                                            <span class="text-success fw-bold">{{ value }}</span>
+                                                                        {% endif %}
+                                                                    {% else %}
+                                                                        {{ value }}
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    {{ value }}
+                                                                {% endif %}
+                                                            {% elif 'Production' in metric_name %}
+                                                                {% if value != 'N/A' %}
+                                                                    <span class="fw-bold">{{ value }}</span>
+                                                                {% else %}
+                                                                    <span>{{ value }}</span>
+                                                                {% endif %}
+                                                            {% else %}
+                                                                {{ value }}
+                                                            {% endif %}
+                                                        </td>
+                                                    {% endif %}
+                                                    
+                                                    {% if 'enhanced_adaptation' in scenario_metrics %}
+                                                        {% set value = values.get('enhanced_adaptation', 'N/A') %}
+                                                        <td>
+                                                            {% if 'Stunting Rate' in metric_name or 'Wasting Rate' in metric_name %}
+                                                                {% if value != 'N/A' %}
+                                                                    {% set numeric_value = value|float(0) %}
+                                                                    {% if numeric_value > 0.3 %}
+                                                                        <span class="text-danger fw-bold">{{ value }}</span>
+                                                                    {% elif numeric_value > 0.2 %}
+                                                                        <span class="text-warning fw-bold">{{ value }}</span>
+                                                                    {% else %}
+                                                                        <span class="text-success fw-bold">{{ value }}</span>
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    {{ value }}
+                                                                {% endif %}
+                                                            {% elif 'Energy Intake' in metric_name %}
+                                                                {% if value != 'N/A' and value != '0 kcal' %}
+                                                                    {% set parts = value.split(' ') %}
+                                                                    {% if parts|length > 0 %}
+                                                                        {% set numeric_value = parts[0]|int(0) %}
+                                                                        {% if numeric_value < 1900 %}
+                                                                            <span class="text-danger fw-bold">{{ value }}</span>
+                                                                        {% elif numeric_value < 2100 %}
+                                                                            <span class="text-warning fw-bold">{{ value }}</span>
+                                                                        {% else %}
+                                                                            <span class="text-success fw-bold">{{ value }}</span>
+                                                                        {% endif %}
+                                                                    {% else %}
+                                                                        {{ value }}
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    {{ value }}
+                                                                {% endif %}
+                                                            {% elif 'Production' in metric_name %}
+                                                                {% if value != 'N/A' %}
+                                                                    <span class="fw-bold">{{ value }}</span>
+                                                                {% else %}
+                                                                    <span>{{ value }}</span>
+                                                                {% endif %}
+                                                            {% else %}
+                                                                {{ value }}
+                                                            {% endif %}
+                                                        </td>
+                                                    {% endif %}
+                                                    
+                                                    {% if 'policy_change_safety_net' in scenario_metrics %}
+                                                        {% set value = values.get('policy_change_safety_net', 'N/A') %}
+                                                        <td>
+                                                            {% if 'Stunting Rate' in metric_name or 'Wasting Rate' in metric_name %}
+                                                                {% if value != 'N/A' %}
+                                                                    {% set numeric_value = value|float(0) %}
+                                                                    {% if numeric_value > 0.3 %}
+                                                                        <span class="text-danger fw-bold">{{ value }}</span>
+                                                                    {% elif numeric_value > 0.2 %}
+                                                                        <span class="text-warning fw-bold">{{ value }}</span>
+                                                                    {% else %}
+                                                                        <span class="text-success fw-bold">{{ value }}</span>
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    {{ value }}
+                                                                {% endif %}
+                                                            {% elif 'Energy Intake' in metric_name %}
+                                                                {% if value != 'N/A' and value != '0 kcal' %}
+                                                                    {% set parts = value.split(' ') %}
+                                                                    {% if parts|length > 0 %}
+                                                                        {% set numeric_value = parts[0]|int(0) %}
+                                                                        {% if numeric_value < 1900 %}
+                                                                            <span class="text-danger fw-bold">{{ value }}</span>
+                                                                        {% elif numeric_value < 2100 %}
+                                                                            <span class="text-warning fw-bold">{{ value }}</span>
+                                                                        {% else %}
+                                                                            <span class="text-success fw-bold">{{ value }}</span>
+                                                                        {% endif %}
+                                                                    {% else %}
+                                                                        {{ value }}
+                                                                    {% endif %}
+                                                                {% else %}
+                                                                    {{ value }}
+                                                                {% endif %}
+                                                            {% elif 'Production' in metric_name %}
+                                                                {% if value != 'N/A' %}
+                                                                    <span class="fw-bold">{{ value }}</span>
+                                                                {% else %}
+                                                                    <span>{{ value }}</span>
+                                                                {% endif %}
+                                                            {% else %}
+                                                                {{ value }}
+                                                            {% endif %}
+                                                        </td>
+                                                    {% endif %}
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    {% for name, value in key_metrics.items() %}
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="metric-card">
+                                {% if 'production' in name.lower() %}
+                                    <div class="metric-icon"><i class="fas fa-wheat-awn"></i></div>
+                                {% elif 'price' in name.lower() %}
+                                    <div class="metric-icon"><i class="fas fa-tags"></i></div>
+                                {% elif 'stunt' in name.lower() or 'wast' in name.lower() %}
+                                    <div class="metric-icon"><i class="fas fa-child"></i></div>
+                                {% elif 'energy' in name.lower() or 'food' in name.lower() %}
+                                    <div class="metric-icon"><i class="fas fa-utensils"></i></div>
+                                {% elif 'income' in name.lower() %}
+                                    <div class="metric-icon"><i class="fas fa-money-bill-wave"></i></div>
+                                {% else %}
+                                    <div class="metric-icon"><i class="fas fa-chart-pie"></i></div>
+                                {% endif %}
+                                <h5>{{ name }}</h5>
+                                <div class="metric-value">{{ value }}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-seedling"></i> Agricultural Production</h2>
+            <p>Agricultural production trends showing rice and other cereal production over the simulation period.</p>
+            
+            <div class="chart-container">
+                {% for plot in plot_filenames %}
+                    {% if 'production_ts' in plot or 'cereal_production_ts' in plot %}
+                        <h4>Cereal Production Trends</h4>
+                        <img src="{{ plot_dir }}/{{ plot }}" alt="Cereal Production Trends">
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-heartbeat"></i> Food Security Outcomes</h2>
+            <p>Key nutritional outcome indicators including stunting, wasting, and caloric intake.</p>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        {% for plot in plot_filenames %}
+                            {% if 'stunting_rate_ts' in plot %}
+                                <h4><i class="fas fa-child"></i> Stunting Rate Over Time</h4>
+                                <img src="{{ plot_dir }}/{{ plot }}" alt="Stunting Rate Trends">
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        {% for plot in plot_filenames %}
+                            {% if 'wasting_rate_ts' in plot %}
+                                <h4><i class="fas fa-weight"></i> Wasting Rate Over Time</h4>
+                                <img src="{{ plot_dir }}/{{ plot }}" alt="Wasting Rate Trends">
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                {% for plot in plot_filenames %}
+                    {% if 'energy_intake_ts' in plot %}
+                        <h4><i class="fas fa-utensils"></i> Energy Intake Over Time</h4>
+                        <img src="{{ plot_dir }}/{{ plot }}" alt="Energy Intake Trends">
+                    {% endif %}
+                {% endfor %}
+            </div>
+            
+            {% for plot in plot_filenames %}
+                {% if 'food_insecurity_map' in plot %}
+                    <div class="chart-container">
+                        <h4><i class="fas fa-map-marked-alt"></i> Food Insecurity by Region</h4>
+                        <img src="{{ plot_dir }}/{{ plot }}" alt="Food Insecurity Map">
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-chart-line"></i> Market Dynamics</h2>
+            <p>Market indicators including food prices and market stability measures.</p>
+            
+            <div class="chart-container">
+                {% for plot in plot_filenames %}
+                    {% if 'price_ts' in plot %}
+                        <h4>Food Price Trends</h4>
+                        <img src="{{ plot_dir }}/{{ plot }}" alt="Food Price Trends">
+                    {% endif %}
+                    {% if 'market_dynamics' in plot %}
+                        <h4>Market Stability Analysis</h4>
+                        <img src="{{ plot_dir }}/{{ plot }}" alt="Market Stability Analysis">
+                    {% endif %}
+                {% endfor %}
+            </div>
+            
+            {% set has_market_dynamics = false %}
+            {% for plot in plot_filenames %}
+                {% if 'price_ts' in plot or 'market_dynamics' in plot %}
+                    {% set has_market_dynamics = true %}
+                {% endif %}
+            {% endfor %}
+            
+            {% if not has_market_dynamics %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> No market dynamics data available for this simulation run.
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-chart-pie"></i> Analysis & Correlations</h2>
+            <p>Statistical analysis of relationships between key indicators in the simulation.</p>
+            
+            <div class="chart-container">
+                {% for plot in plot_filenames %}
+                    {% if 'indicator_correlation' in plot %}
+                        <h4>Indicator Correlations</h4>
+                        <img src="{{ plot_dir }}/{{ plot }}" alt="Indicator Correlations">
+                    {% endif %}
+                    {% if 'correlation_scatter' in plot %}
+                        <h4>Detailed Correlation Analysis</h4>
+                        <img src="{{ plot_dir }}/{{ plot }}" alt="Detailed Correlation Analysis">
+                        <p class="text-muted">This scatter plot matrix shows the relationships between key indicators over time.</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            
+            {% set has_correlation_plots = false %}
+            {% for plot in plot_filenames %}
+                {% if 'correlation' in plot or 'indicator_correlation' in plot or 'correlation_scatter' in plot %}
+                    {% set has_correlation_plots = true %}
+                {% endif %}
+            {% endfor %}
+            
+            {% if not has_correlation_plots %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> No correlation or distribution data available for this simulation run.
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-table"></i> Detailed Results</h2>
+            <p>Comprehensive tables of simulation results by year and scenario.</p>
+            
+            <div class="table-container">
+                {% if detailed_tables %}
+                    <ul class="nav nav-tabs" id="resultTabs" role="tablist">
+                        {% for scenario_name, df in detailed_tables.items() %}
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link {% if loop.first %}active{% endif %}" 
+                                        id="scenario-tab-{{ loop.index }}" 
+                                        data-bs-toggle="tab" 
+                                        data-bs-target="#scenario-panel-{{ loop.index }}" 
+                                        type="button" role="tab">
+                                    {{ scenario_name|replace('_', ' ')|title }}
+                                </button>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    
+                    <div class="tab-content mt-3" id="resultTabContent">
+                        {% for scenario_name, df in detailed_tables.items() %}
+                            <div class="tab-pane fade {% if loop.first %}show active{% endif %}" 
+                                 id="scenario-panel-{{ loop.index }}" 
+                                 role="tabpanel" 
+                                 aria-labelledby="scenario-tab-{{ loop.index }}">
+                                 
+                                <div class="table-responsive">
+                                    <h4>{{ scenario_name|replace('_', ' ')|title }} Detailed Results</h4>
+                                    {% if df|length > 0 %}
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    {% for col in df.columns %}
+                                                        <th>{{ col|replace('_', ' ')|title }}</th>
+                                                    {% endfor %}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for row in df.itertuples() %}
+                                                    <tr>
+                                                        {% for i in range(1, df.shape[1] + 1) %}
+                                                            <td>{{ row[i] }}</td>
+                                                        {% endfor %}
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    {% else %}
+                                        <div class="alert alert-warning">
+                                            <i class="fas fa-exclamation-triangle"></i> No data available for this scenario.
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {% for key, table_html in summary_tables.items() %}
+                        <h4>{{ key|replace('_', ' ')|title }}</h4>
+                        {{ table_html|safe }}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            
+            {% if not summary_tables and not detailed_tables %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> No detailed tabular data available for this simulation run.
+                </div>
+            {% endif %}
+            
+            {% if scenario_plots %}
+                <h3 class="mt-5"><i class="fas fa-file-invoice"></i> Individual Scenario Reports</h3>
+                <div class="row">
+                    {% for scenario_name, plot_files in scenario_plots.items() %}
+                        {% if plot_files %}
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-secondary text-white">
+                                        <h5 class="mb-0">{{ scenario_name|replace('_', ' ')|title }}</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Scenario report includes {{ plot_files|length }} plot(s).</p>
+                                        <a href="{{ scenario_name }}/{{ scenario_name }}_simulation_report.html" 
+                                           class="btn btn-outline-primary" target="_blank">
+                                            <i class="fas fa-external-link-alt"></i> View Detailed Report
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+    <div class="footer">
+        <div class="container">
+            <p><i class="fas fa-code"></i> Bangladesh Food Security Simulation Model</p>
+            <p><i class="far fa-copyright"></i> 2025 Food Security Analysis Team</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add some interactivity to the images
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.addEventListener('click', function() {
+                    if (this.style.maxWidth === '100%' || this.style.maxWidth === '') {
+                        this.style.position = 'relative';
+                        this.style.zIndex = '1000';
+                        this.style.transition = 'transform 0.3s ease';
+                        this.style.transform = 'scale(1.05)';
+                        this.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
+                    } else {
+                        this.style.position = '';
+                        this.style.zIndex = '';
+                        this.style.transform = '';
+                        this.style.boxShadow = '';
+                    }
+                });
+                
+                // Reset when clicking elsewhere
+                document.addEventListener('click', function(e) {
+                    if (e.target !== img) {
+                        img.style.position = '';
+                        img.style.zIndex = '';
+                        img.style.transform = '';
+                        img.style.boxShadow = '';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

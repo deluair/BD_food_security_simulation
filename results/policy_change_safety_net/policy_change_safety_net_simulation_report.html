@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Security Simulation Report: Policy Change Safety Net</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            margin-bottom: 10px;
+            color: white;
+            font-weight: 700;
+        }
+        .header p {
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 5px;
+        }
+        .container {
+            max-width: 1200px;
+            padding: 0 15px;
+        }
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+        .section h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        h3 {
+            color: #3498db;
+            font-size: 20px;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+        .chart-container {
+            margin: 25px 0;
+            text-align: center;
+            position: relative;
+        }
+        .chart-container h4 {
+            margin-bottom: 15px;
+            color: #34495e;
+            font-weight: 600;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #eaeaea;
+            border-radius: 6px;
+            padding: 8px;
+            background-color: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        img:hover {
+            transform: scale(1.01);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            margin-bottom: 25px;
+            border-collapse: collapse;
+        }
+        table th {
+            background-color: #f2f8ff;
+            font-weight: 600;
+            border: 1px solid #e3e3e3;
+            padding: 10px;
+            text-align: center;
+        }
+        table td {
+            border: 1px solid #e3e3e3;
+            padding: 8px;
+            text-align: center;
+        }
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .metric-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease;
+            height: 100%;
+        }
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .metric-card h5 {
+            color: #7f8c8d;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .metric-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #3498db;
+        }
+        .metric-icon {
+            font-size: 30px;
+            margin-bottom: 15px;
+            color: #3498db;
+        }
+        .footer {
+            margin-top: 40px;
+            padding: 25px 15px;
+            text-align: center;
+            font-size: 14px;
+            color: #7f8c8d;
+            background-color: #2c3e50;
+            color: rgba(255,255,255,0.7);
+        }
+        .footer p {
+            margin-bottom: 5px;
+        }
+        @media (max-width: 768px) {
+            .metric-card {
+                margin-bottom: 15px;
+            }
+        }
+        .scenario-badge {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .scenario-badge-lg {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            text-align: center;
+            width: 100%;
+        }
+        .takeaway-card {
+            background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+            border-left: 4px solid #3498db;
+            transition: transform 0.2s ease;
+        }
+        .takeaway-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .takeaway-card h5 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .takeaway-card i {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1><i class="fas fa-chart-line"></i> Food Security Simulation Report: Policy Change Safety Net</h1>
+            <p><i class="far fa-calendar-alt"></i> Generated on 2025-04-22 09:47:47</p>
+            <p><i class="fas fa-calendar-week"></i> Simulation period: 2025-2035</p>
+            <div class="scenario-badge" title="Simulation scenario">
+                Policy Change Safety Net
+            </div>
+        </div>
+    </div>
+    <div class="container">
+
+        <div class="section">
+            <h2><i class="fas fa-tachometer-alt"></i> Executive Summary</h2>
+            <p>This report presents the results of the Bangladesh Food Security Simulation Model. The model simulates food production, consumption, and nutritional outcomes under different scenarios.</p>
+            
+            
+            
+            <div class="row mt-4">
+                
+                    
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="metric-card">
+                                
+                                    <div class="metric-icon"><i class="fas fa-chart-pie"></i></div>
+                                
+                                <h5>Final Population</h5>
+                                <div class="metric-value">189,663,619</div>
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="metric-card">
+                                
+                                    <div class="metric-icon"><i class="fas fa-chart-pie"></i></div>
+                                
+                                <h5>Final GDP per Capita</h5>
+                                <div class="metric-value">$4,935.58</div>
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="metric-card">
+                                
+                                    <div class="metric-icon"><i class="fas fa-child"></i></div>
+                                
+                                <h5>Final Stunting Rate</h5>
+                                <div class="metric-value">0.280</div>
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="metric-card">
+                                
+                                    <div class="metric-icon"><i class="fas fa-child"></i></div>
+                                
+                                <h5>Final Wasting Rate</h5>
+                                <div class="metric-value">0.070</div>
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="metric-card">
+                                
+                                    <div class="metric-icon"><i class="fas fa-utensils"></i></div>
+                                
+                                <h5>Avg Energy Intake (Final Year)</h5>
+                                <div class="metric-value">0 kcal</div>
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="metric-card">
+                                
+                                    <div class="metric-icon"><i class="fas fa-wheat-awn"></i></div>
+                                
+                                <h5>Avg Rice Production</h5>
+                                <div class="metric-value">N/A</div>
+                            </div>
+                        </div>
+                    
+                
+            </div>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-seedling"></i> Agricultural Production</h2>
+            <p>Agricultural production trends showing rice and other cereal production over the simulation period.</p>
+            
+            <div class="chart-container">
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </div>
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-heartbeat"></i> Food Security Outcomes</h2>
+            <p>Key nutritional outcome indicators including stunting, wasting, and caloric intake.</p>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        
+                            
+                                <h4><i class="fas fa-child"></i> Stunting Rate Over Time</h4>
+                                <img src="plots/policy_change_safety_net_stunting_rate_ts.png" alt="Stunting Rate Trends">
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        
+                            
+                        
+                            
+                                <h4><i class="fas fa-weight"></i> Wasting Rate Over Time</h4>
+                                <img src="plots/policy_change_safety_net_wasting_rate_ts.png" alt="Wasting Rate Trends">
+                            
+                        
+                            
+                        
+                            
+                        
+                            
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                
+                    
+                
+                    
+                
+                    
+                        <h4><i class="fas fa-utensils"></i> Energy Intake Over Time</h4>
+                        <img src="plots/policy_change_safety_net_energy_intake_ts.png" alt="Energy Intake Trends">
+                    
+                
+                    
+                
+                    
+                
+            </div>
+            
+            
+                
+            
+                
+            
+                
+            
+                
+            
+                
+            
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-chart-line"></i> Market Dynamics</h2>
+            <p>Market indicators including food prices and market stability measures.</p>
+            
+            <div class="chart-container">
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                        <h4>Food Price Trends</h4>
+                        <img src="plots/policy_change_safety_net_rice_price_ts.png" alt="Food Price Trends">
+                    
+                    
+                
+                    
+                    
+                
+            </div>
+            
+            
+            
+                
+            
+                
+            
+                
+            
+                
+                    
+                
+            
+                
+            
+            
+            
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> No market dynamics data available for this simulation run.
+                </div>
+            
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-chart-pie"></i> Analysis & Correlations</h2>
+            <p>Statistical analysis of relationships between key indicators in the simulation.</p>
+            
+            <div class="chart-container">
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                        <h4>Indicator Correlations</h4>
+                        <img src="plots/policy_change_safety_net_indicator_correlation.png" alt="Indicator Correlations">
+                    
+                    
+                
+            </div>
+            
+            
+            
+                
+            
+                
+            
+                
+            
+                
+            
+                
+                    
+                
+            
+            
+            
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> No correlation or distribution data available for this simulation run.
+                </div>
+            
+        </div>
+
+        <div class="section">
+            <h2><i class="fas fa-table"></i> Detailed Results</h2>
+            <p>Comprehensive tables of simulation results by year and scenario.</p>
+            
+            <div class="table-container">
+                
+                    
+                        <h4>Annual Summary</h4>
+                        <table border="1" class="dataframe table table-striped table-hover">
+  <thead>
+    <tr style="text-align: right;">
+      <th>year</th>
+      <th>total_population</th>
+      <th>gdp_per_capita</th>
+      <th>rice_production_total</th>
+      <th>wheat_production_total</th>
+      <th>rice_price_retail</th>
+      <th>stunting_prevalence</th>
+      <th>wasting_prevalence</th>
+      <th>avg_energy_intake</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2025</td>
+      <td>171700000.00</td>
+      <td>2756.00</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.0</td>
+      <td>0.28</td>
+      <td>0.07</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>2026</td>
+      <td>173417000.00</td>
+      <td>2921.36</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.0</td>
+      <td>0.28</td>
+      <td>0.07</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>2027</td>
+      <td>175151170.00</td>
+      <td>3096.64</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.0</td>
+      <td>0.28</td>
+      <td>0.07</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>2028</td>
+      <td>176902681.70</td>
+      <td>3282.44</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.0</td>
+      <td>0.28</td>
+      <td>0.07</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>2029</td>
+      <td>178671708.52</td>
+      <td>3479.39</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.0</td>
+      <td>0.28</td>
+      <td>0.07</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>2030</td>
+      <td>180458425.60</td>
+      <td>3688.15</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.0</td>
+      <td>0.28</td>
+      <td>0.07</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>2031</td>
+      <td>182263009.86</td>
+      <td>3909.44</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.0</td>
+      <td>0.28</td>
+      <td>0.07</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>2032</td>
+      <td>184085639.96</td>
+      <td>4144.00</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.0</td>
+      <td>0.28</td>
+      <td>0.07</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>2033</td>
+      <td>185926496.36</td>
+      <td>4392.65</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.0</td>
+      <td>0.28</td>
+      <td>0.07</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>2034</td>
+      <td>187785761.32</td>
+      <td>4656.20</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.0</td>
+      <td>0.28</td>
+      <td>0.07</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>2035</td>
+      <td>189663618.93</td>
+      <td>4935.58</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.0</td>
+      <td>0.28</td>
+      <td>0.07</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+                    
+                
+            </div>
+            
+            
+            
+            
+        </div>
+
+    </div>
+    <div class="footer">
+        <div class="container">
+            <p><i class="fas fa-code"></i> Bangladesh Food Security Simulation Model</p>
+            <p><i class="far fa-copyright"></i> 2025 Food Security Analysis Team</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add some interactivity to the images
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.addEventListener('click', function() {
+                    if (this.style.maxWidth === '100%' || this.style.maxWidth === '') {
+                        this.style.position = 'relative';
+                        this.style.zIndex = '1000';
+                        this.style.transition = 'transform 0.3s ease';
+                        this.style.transform = 'scale(1.05)';
+                        this.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
+                    } else {
+                        this.style.position = '';
+                        this.style.zIndex = '';
+                        this.style.transform = '';
+                        this.style.boxShadow = '';
+                    }
+                });
+                
+                // Reset when clicking elsewhere
+                document.addEventListener('click', function(e) {
+                    if (e.target !== img) {
+                        img.style.position = '';
+                        img.style.zIndex = '';
+                        img.style.transform = '';
+                        img.style.boxShadow = '';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
